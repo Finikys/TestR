@@ -1,11 +1,15 @@
 package ru.netology.testmode.test;
 
+import com.codeborne.selenide.Condition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import java.time.Duration;
+import java.util.Dictionary;
+
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.*;
 import static ru.netology.testmode.data.DataGenerator.Registration.getRegisteredUser;
 import static ru.netology.testmode.data.DataGenerator.Registration.getUser;
 import static ru.netology.testmode.data.DataGenerator.getRandomLogin;
@@ -25,6 +29,7 @@ class AuthTest {
         $("[name = 'login']").setValue(registeredUser.getLogin());
         $("[name='password']").setValue((registeredUser.getPassword()));
         $("[class='button__text']").click();
+        $("[class='heading heading_size_l heading_theme_alfa-on-white']").shouldBe(visible);
     }
 
     @Test
@@ -34,6 +39,7 @@ class AuthTest {
         $("[name = 'login']").setValue(notRegisteredUser.getLogin());
         $("[name='password']").setValue((notRegisteredUser.getPassword()));
         $("[class='button__text']").click();
+        $("[class='notification__title']").shouldBe(visible);
     }
 
     @Test
@@ -43,6 +49,7 @@ class AuthTest {
         $("[name = 'login']").setValue(blockedUser.getLogin());
         $("[name='password']").setValue((blockedUser.getPassword()));
         $("[class='button__text']").click();
+        $("[class='notification__icon']").shouldBe(visible);
     }
 
     @Test
@@ -53,6 +60,7 @@ class AuthTest {
         $("[name = 'login']").setValue(wrongLogin);
         $("[name='password']").setValue((registeredUser.getPassword()));
         $("[class='button__text']").click();
+        $("[class='notification__title']").shouldBe(visible);
     }
 
     @Test
@@ -63,9 +71,7 @@ class AuthTest {
         $("[name = 'login']").setValue(registeredUser.getLogin());
         $("[name='password']").setValue(wrongPassword);
         $("[class='button__text']").click();
-        // TODO: добавить логику теста в рамках которого будет выполнена попытка входа в личный кабинет с неверным
-        //  паролем, для заполнения поля формы "Логин" используйте пользователя registeredUser,
-        //  "Пароль" - переменную wrongPassword
+        $("[class='notification__title']").shouldBe(visible);
     }
 
 }
